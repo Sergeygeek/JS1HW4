@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Миллионер</title>
+</head>
+<body>
+<script>
+  /**
+   * Массив объектов с вопросами и ответами
+   * @type {object[]}
+   */
+  const data = [
+    /**
+     * @property {string} question - Вопрос
+     * @property {object} variants - Варианты ответов
+     * @property {string} correctAnswer - Правильный ответ
+     */
+    {
+      question:
+          'Как правильно закончить пословицу: "Не откладывай на завтра то, что можно…"?',
+        variants: {
+          a: 'сделать сегодня',
+          b: 'сделать послезавтра',
+          c: 'сделать через месяц',
+          d: 'никогда не делать'
+        },
+        correctAnswer: 'a'
+      },
+      {
+        question:
+          'Что говорит человек, когда замечает нечто необычное?',
+        variants: {
+          a: 'попало в лоб',
+          b: 'залетело в рот',
+          c: 'накапало в уши',
+          d: 'бросилось в глаза'
+        },
+        correctAnswer: 'd'
+      },
+      {
+        question:
+          'Что помогает туристу ориентироваться в незнакомом городе?',
+        variants: {
+          a: 'путепровод',
+          b: 'путеукладчик',
+          c: 'путеводитель',
+          d: 'путеводная звезда'
+        },
+        correctAnswer: 'c'
+      },
+      {
+        question:
+          'Какой наряд прославил баснописец Крылов?',
+        variants: {
+          a: 'тришкин кафтан',
+          b: 'ивашкин армяк',
+          c: 'прошкин зипун',
+          d: 'машкин сарафан'
+        },
+        correctAnswer: 'a'
+      },
+      {
+        question:
+          'Как звали старшую сестру императора Петра Первого?',
+        variants: {
+          a: 'Вера',
+          b: 'Надежда',
+          c: 'Любовь',
+          d: 'Софья'
+        },
+        correctAnswer: 'd'
+      },
+    ];
+
+  const game = {
+    data,
+    scoreCount: 0,
+    questionIndex: 0,
+
+    /**
+     * Инициализация игры
+     */
+    init() {
+        // Сбросим количество правильных ответов и индекс вопроса
+      this.scoreCount = 0;
+      this.questionIndex = 0;
+    },
+
+
+    run() {
+      // Инициализируем игру
+      this.init();
+
+      while(true) {
+        // Проверяем прошли ли мы по всем вопросам
+        if (this.isGameOver()) {
+          return alert(`Спасибо за игру. Правильных ответов: ${this.scoreCount}`);
+        }
+
+        // Получаем строку с текущим вопросом и ответами
+        const question = this.getCurrentQuestionString(this.questionIndex);
+
+        // Получаем ответ от игрока
+        const answer = this.getAnswer(question);
+
+        // Проверяем на валидность
+        if (!this.validateAnswer(answer)) {
+          alert('Вы ввели недопустимый ответ');
+          continue;
+        }
+
+        // Проверяем хотел ли игрок выйти
+        if (this.userWantExit(answer)) {
+          return alert('До свидания');
+        }
+
+        // Проверяем ответ на правильность
+        if (this.isAnswerCorrect(answer, this.questionIndex)) {
+          this.scoreCount++;
+        }
+
+        this.questionIndex++;
+      }
+
+    },
+
+    getAnswer(question) {
+      return prompt(question);
+    },
+
+    /**
+     * Возвращает строку с текущим вопросом и ответами
+     * @param {number} index - Индекс вопроса
+     * @returns {string} - Строка с вопросом и ответами
+     */
+    getCurrentQuestionString(index) {
+      let question = this.data[index].question;
+      let questionVariants = '';
+      let variants = this.data[index].variants;
+
+      for(const key in variants) {
+          questionVariants += `${key} - ${variants[key]} \n`;
+      }
+      return `Вопрос: ${question}
+      Варианты ответов:\n${questionVariants}
+      для выхода введите 1`
+    },
+
+    /**
+     * Проверяет на валидность ответ игрока
+     * @param {string} answer - принимает строку с ответом игрока
+     * @returns {boolean} - возвращает true, если игрок ввел валидный ответ
+     */
+    validateAnswer(answer) {
+      return answer === 'a' || answer === 'b' ||
+        answer === 'c' || answer === 'd' || answer === '1';
+    },
+
+    /**
+     * Проверяет хотел ли игорок выйти
+     * @param {string} answer - принимает строку с ответом игрока
+     * @returns {boolean} - возвращает true, если игрок хотел выйти
+     */
+    userWantExit(answer) {
+      return answer === '1';
+    },
+
+    /**
+     * Проверяет правильный ли ответ дал пользователь
+     * @param {string} answer - принимает строку с ответом игрока
+     * @param {number} idx - Индекс вопроса
+     * @returns {boolean} возвращает true, если игрок дал правильный ответ
+     */
+    isAnswerCorrect(answer, idx) {
+      const correctAnswer = this.data[idx].correctAnswer;
+      return answer === correctAnswer;
+    },
+
+    /**
+     * Проверяет дошли ли мы до конца
+     * @returns {boolean} - возвращает true, если ответили на все вопросы
+     */
+    isGameOver() {
+      return this.questionIndex === this.data.length;
+    }
+  };
+
+  game.run();
+</script>
+</body>
+</html>

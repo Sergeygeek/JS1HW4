@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>First Task</title>
+</head>
+<body>
+  <script>
+    const number = Number(prompt('Введите число от 0 до 999'));
+
+    /**
+     * Функция, преобразующая число в объект
+     * @param {number}number - Целое число
+     * @returns {object} - объект
+     */
+    function numberToObject(number) {
+      // Обрабатываем исключения
+      if (number < 0 || number > 999 || !Number.isInteger(number)) {
+        return {};
+      }
+      return {
+        firstDigit: number % 10,
+        secondDigit: parseInt((number / 10) % 10),
+        thirdDigit: parseInt((number / 100) % 10),
+      }
+    }
+
+    console.log(numberToObject(number));
+  </script>
+</body>
+</html>
